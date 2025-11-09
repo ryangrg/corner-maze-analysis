@@ -1,4 +1,3 @@
-import pandas as pd
 import sqlite3
 
 # This code will remove rows were session number is labeled as X and will merge rows and the values
@@ -21,12 +20,6 @@ shaped_db_path = 'data/processed/MazeControl-clean.db'
 
 # Call the function to copy the database
 copy_db(original_db_path, shaped_db_path)
-
-
-# set panda display options
-pd.set_option('display.max_columns', None,
-              'display.max_rows', None,
-              'display.expand_frame_repr', False)
 
 # connect to sqlite database
 conn = sqlite3.connect('data/processed/MazeControl-clean.db')

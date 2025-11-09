@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository houses analysis utilities and figures for the tentatively titled "Neural Mechanisms of Flexible and Inflexible Navigational Behaviors", including SQLite database helpers, exploratory notebooks, and plotting scripts. Use this document as a starting point and update the placeholder sections with project-specific details.
+This repository houses analysis utilities and figures for the tentatively titled "Neural Mechanisms of Flexible and Inflexible Navigational Behaviors", including SQLite database helpers, exploratory notebooks, and plotting scripts.
 
 ## Repository Layout
 
@@ -21,7 +21,7 @@ subject_id = [47<sup>*</sup>, 48<sup>*</sup>, 49, 50<sup>*</sup>, 51, 52, 53<sup
 
 # <sup>*</sup>Subjects that had sessions that needed to be removed for one reason or another or sessions that needed to be merged.
 47: Novel Route Session Drop on PI+VC Training did not reach criterion in the start of the session to start probe trials.
-48: Had a full acqucition session run between the Novel Route probe and No Cue, this is removed.
+48: Had a full acquisition session run between the Novel Route probe and No Cue, this is removed.
 50: Had to have a No Cue session merged, no issues with couter balancing trial types
 53: Had to have No Cue sessions merged, not perfectly counterbalnced 17 trials from west arm and 15 trials form east arm. We take this as a trivial issue.
 80: Had to end a No Cue Detour session 4 trials into the probe trials do to maze issues. The subject experienced three Detour trials and session terminated. Subject didn't not run until the next day. Hard to say what effect there could have been on nexts days performance but first four Detour trials had errors so it did not seem to boost performance. Subject had a total of 5 Detour trials with errors.
