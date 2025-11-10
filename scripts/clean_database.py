@@ -16,20 +16,21 @@ def copy_db(original_db_path, backup_db_path):
 
 # Paths to the original and backup databases
 original_db_path = 'data/raw/MazeControl.db'
-shaped_db_path = 'data/processed/MazeControl-clean.db'
+clean_db_path = 'data/processed/MazeControl-clean.db'
 
 # Call the function to copy the database
-copy_db(original_db_path, shaped_db_path)
+copy_db(original_db_path, clean_db_path)
 
 # connect to sqlite database
-conn = sqlite3.connect('data/processed/MazeControl-clean.db')
+conn = sqlite3.connect(clean_db_path)
 cursor = conn.cursor()
 
 # Enter Rat IDs you want data for here
 # create id list for subjects you want from database
 subject_id = [47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 67, 68, 69, 71, 
-              73, 75, 76, 78, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 93, 94, 95, 96, 97, 98, 
-              99, 100, 106, 107, 108, 109, 110, 112, 113, 117, 119, 120, 122]
+              73, 75, 76, 78, 80, 82, 84, 85, 86, 87, 88, 89, 90, 93, 94, 95, 96, 97, 98, 
+              99, 100, 106, 107, 108, 109, 110, 112, 113, 117, 119, 120, 122, 123, 124, 126,
+              127, 129, 130]
 
 # Remove all data associated with subjects we are not keeping
 placeholders = ",".join("?" for _ in subject_id)
@@ -42,6 +43,8 @@ cursor.execute(f'''DELETE FROM trial
 cursor.execute(f'''DELETE FROM session_event
                    WHERE session_id IN ({session_filter})''', tuple(subject_id))
 cursor.execute(f'''DELETE FROM session
+                   WHERE subject_id NOT IN ({placeholders})''', tuple(subject_id))
+cursor.execute(f'''DELETE FROM subjects
                    WHERE subject_id NOT IN ({placeholders})''', tuple(subject_id))
 
 # Delete rows from sessions that had issues with the maze and it had to stop and was rerun or the

@@ -12,12 +12,22 @@ This repository houses analysis utilities and figures for the tentatively titled
 - `plots/`: Generated figures kept under version control when needed.
 - `test/`: Unit or integration tests (expand or remove if unused).
 
+## build_pandas_table.py (quick tour)
+`scripts/build_pandas_table.py` is the main feature-engineering pipeline for the paper. Beginning around line 46, the script defines a suite of helper functions (e.g., `approach_to_goal_from_cue`, `set_session_type_and_subtype`, `novel_route_score`) that translate raw MazeControl trial logs into the categorical metrics referenced in the manuscript. Once those helpers are in place, the script:
+- connects to `data/processed/MazeControl-clean.db`;
+- pulls subject/session/trial tables into pandas DataFrames;
+- aggregates acquisition, novel-route, no-cue, rotation, and reversal probe scores (raw, percent, min–max, modified z, and z);
+- labels each subject with training type/subtype (e.g., `PI+VC_f2`, `VC_PI+VC`) based on its session set;
+- builds PCA/k-means embeddings of the normalized probe metrics for downstream clustering figures.
+
+The resulting `tstc_results_df` DataFrame is the canonical table consumed by notebooks/plots, so any new behavioral metric should be added to this script first.
+
 # Raw Data Overview
 `data/raw/MazeControl.db`
 MazeControl.db holds subject, session and trial data from all experiments I conducted on the Corner Maze. Session numbers labeled as X are removed and where session numbers are the same the session are combined. This removes sessions that had issues with the maze and had to be stopped or sessions in which rats did not meat criterion on standard trials before starting the session. This also joins sessions in which an issue happened on the maze that required the session to be stopped, but the issue was quickly resolved and the rat was able to coninute.
 
 The subjects used in this anaylsis are:
-subject_id = [47<sup>*</sup>, 48<sup>*</sup>, 49, 50<sup>*</sup>, 51, 52, 53<sup>*</sup>, 54, 55, 56,57, 58, 59, 60, 61, 62, 63, 67, 68, 69, 71, 73, 75, 76, 78, 80, 82, 84, 85, 86, 87, 88<sup>*</sup>, 89, 90, 93<sup>*</sup>, 94, 95, 96<sup>*</sup>, 97<sup>*</sup>, 98, 99<sup>*</sup>, 100, 106, 112, 118, 119, 120, 122, 100]
+subject_id = [47<sup>*</sup>, 48<sup>*</sup>, 49, 50<sup>*</sup>, 51, 52, 53<sup>*</sup>, 54, 55, 56,57, 58, 59, 60, 61, 62, 63, 67, 68, 69, 71, 73, 75, 76, 78, 80, 82, 84, 85, 86, 87, 88<sup>*</sup>, 89, 90, 93<sup>*</sup>, 94, 95, 96<sup>*</sup>, 97<sup>*</sup>, 98, 99<sup>*</sup>, 100, 106, 112, 118, 119, 120, 122]
 
 # <sup>*</sup>Subjects that had sessions that needed to be removed for one reason or another or sessions that needed to be merged.
 47: Novel Route Session Drop on PI+VC Training did not reach criterion in the start of the session to start probe trials.
@@ -27,12 +37,18 @@ subject_id = [47<sup>*</sup>, 48<sup>*</sup>, 49, 50<sup>*</sup>, 51, 52, 53<sup
 80: Had to end a No Cue Detour session 4 trials into the probe trials do to maze issues. The subject experienced three Detour trials and session terminated. Subject didn't not run until the next day. Hard to say what effect there could have been on nexts days performance but first four Detour trials had errors so it did not seem to boost performance. Subject had a total of 5 Detour trials with errors.
 88: Dropped reversal sessions that failed to get criterion in first 16 trials.
 93: Two Dropped reversal sessions that failed to get to criterion in first 16 trials.
-96: No Cue Novel Route session dropped for failure to get to criterion in first 16 trials.
+96: No Cue Novel Route and reversal session dropped for failure to get to criterion in first 16 trials.
 97: No Cue Novel Route session dropped for failure to get to criterion in first 16 trials.
 99: Dropped reversal sessions that failed to get criterion in first 16 trials.
 106: Accidentally had an acquisition session between novel route and switch/reversal, this was removed from the data. This rat also continued training after reversal to test DREADDs on a detour session from opposite arm of initial detour and switched to opposite corner for goal. These sessions weren't used for the paper and are dropped from analysis here.
+107: Has a non-criterion reversal and detour removed, and extra unused protocol trials
+108, 109, 110,113: Just has unused protocol removed
 112: Issue occurred with maze on an acquisition session which is removed along with secondary detour session from an alternate arm for a protocol that was dropped. No issues with first detour session.
 122: Just has bad session starts where something went wrong on setup, didn't actually run on deleted session
 123: Lots of false starts setting up maze, no issue with subject.
-
+125: Stopped running on detour session, has dropped session on reversal, and reversal session is one
+trial shy of complettion at 79. No rotate session either. (Ok to drop from anaylsis)
+126: Reversal session drop before probe start from issues with maze. Also ran double Novel route dropped second sessoin.
+127: Has aquisition session dropped with set-up issue no rat on maze.
+129: Reversal session with set-up faults, no issue for rat.
 
