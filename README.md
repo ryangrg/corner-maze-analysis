@@ -29,6 +29,8 @@ MazeControl.db holds subject, session and trial data from all experiments I cond
 The subjects used in this anaylsis are:
 subject_id = [47<sup>*</sup>, 48<sup>*</sup>, 49, 50<sup>*</sup>, 51, 52, 53<sup>*</sup>, 54, 55, 56,57, 58, 59, 60, 61, 62, 63, 67, 68, 69, 71, 73, 75, 76, 78, 80, 82, 84, 85, 86, 87, 88<sup>*</sup>, 89, 90, 93<sup>*</sup>, 94, 95, 96<sup>*</sup>, 97<sup>*</sup>, 98, 99<sup>*</sup>, 100, 106, 112, 118, 119, 120, 122]
 
+PI+VC_f2 = []
+
 # <sup>*</sup>Subjects that had sessions that needed to be removed for one reason or another or sessions that needed to be merged.
 47: Novel Route Session Drop on PI+VC Training did not reach criterion in the start of the session to start probe trials.
 48: Had a full acquisition session run between the Novel Route probe and No Cue, this is removed.

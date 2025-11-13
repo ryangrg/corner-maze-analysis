@@ -904,6 +904,7 @@ tstc_results_df = pd.DataFrame({'subject_id' : pd.Series(dtype=int),
                                 'training_subtype' : pd.Series(dtype=str),
                                 'cue_approach' : pd.Series(dtype=str),
                                 'acquisition_scrs' : pd.Series(dtype=object), # Numpy array of raw error scores from each training session
+                                'sessions_to_acq' : pd.Series(dtype=int),
                                 'trials_to_acq' : pd.Series(dtype=int),
                                 'novel_route_probe_rscr' : pd.Series(dtype=int), # raw score of novel route trials
                                 'novel_route_probe_scr' : pd.Series(dtype=int), # percent score of novel route trials
@@ -974,12 +975,23 @@ session_filter = ['Fixed Cue 1', 'Fixed Cue 1 Twist', 'Rotate Train', 'Dark Trai
 filtered_session_data_df = session_data_df[session_data_df['session_type'].isin(session_filter)]
 acquisition_scrs_df = filtered_session_data_df.groupby(['subject_id', 'session_type'])['score'].apply(
     lambda x: [float(i) for i in x]).reset_index()
-tstc_results_df['acquisition_scrs'] = tstc_results_df['acquisition_scrs'].combine_first(
-    tstc_results_df['subject_id'].map(acquisition_scrs_df.set_index('subject_id')['score']))
+tstc_results_df['acquisition_scrs'] = tstc_results_df['subject_id'].map(
+    acquisition_scrs_df.set_index('subject_id')['score'])
+
+# tstc_results_df['acquisition_scrs'] = tstc_results_df['acquisition_scrs'].combine_first(
+#     tstc_results_df['subject_id'].map(acquisition_scrs_df.set_index('subject_id')['score']))
+
+# ADD sessions_to_acquisition TO tstc_results_df DATAFRAME
+tstc_results_df['sessions_to_acq'] = tstc_results_df['acquisition_scrs'].apply(
+    lambda x: len(x))
 
 # ADD trials_to_acquisition TO tstc_results_df DATAFRAME
-tstc_results_df['trials_to_acq'] = tstc_results_df['acquisition_scrs'].apply(
-    lambda x: len(x))
+session_filter = ['Fixed Cue 1', 'Fixed Cue 1 Twist', 'Rotate Train', 'Dark Train']
+acquisition_trial_data_df = trial_data_df[trial_data_df['session_type'].isin(session_filter)]
+# Sum total_trials for each subject in the acquisition session filter data
+acquisition_total_trials_df = filtered_session_data_df.groupby('subject_id')['total_trials'].sum().reset_index()
+tstc_results_df['trials_to_acq'] = tstc_results_df['subject_id'].map(
+    acquisition_total_trials_df.set_index('subject_id')['total_trials'])
 
 # ADD novel_route_preprobe_std_rscr, novel_route_preprobe_std_scr TO tstc_results_df DATAFRAME
 num_novel_route_preprobe_trials = 16
